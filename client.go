@@ -196,40 +196,6 @@ func (c Client) write(s string) error {
 	return nil
 }
 
-// greet runs connection initiation (NICK, USER) and then reads messages until
-// it sees it worked.
-//
-// Currently we wait until we time out reading a message before reporting
-// failure, or until we see an ERROR.
-func (c *Client) greet() error {
-	if err := c.Register(); err != nil {
-		return err
-	}
-
-	for {
-		msg, err := c.ReadMessage()
-		if err != nil {
-			return err
-		}
-
-		c.hooks(msg)
-
-		// RPL_WELCOME tells us we've registered.
-		//
-		// Note RPL_WELCOME is not defined in RFC 1459. It is in RFC 2812. The best
-		// way I can tell from RFC 1459 that we've completed registration is by
-		// looking for RPL_LUSERCLIENT which apparently must be sent (section 8.5).
-		if msg.Command == irc.ReplyWelcome {
-			c.registered = true
-			return nil
-		}
-
-		if msg.Command == "ERROR" {
-			return fmt.Errorf("received ERROR: %s", msg)
-		}
-	}
-}
-
 // Loop enters a loop reading from the server.
 //
 // We maintain the IRC connection.
