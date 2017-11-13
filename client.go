@@ -108,7 +108,7 @@ func (c *Client) Connect() error {
 		conn, err := tls.DialWithDialer(dialer, "tcp",
 			fmt.Sprintf("%s:%d", c.host, c.port),
 			&tls.Config{
-				// Typically IRC servers won't have valid certs.
+				// Often IRC servers don't have valid certs.
 				InsecureSkipVerify: true,
 			})
 		if err != nil {
@@ -313,7 +313,7 @@ func (c *Client) User() error {
 		Command: "USER",
 		Params:  []string{c.ident, "0", "*", c.name},
 	}); err != nil {
-		return fmt.Errorf("failed to send NICK: %s", err)
+		return fmt.Errorf("failed to send USER: %s", err)
 	}
 
 	return nil
