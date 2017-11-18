@@ -148,7 +148,7 @@ func (c Client) ReadMessage() (irc.Message, error) {
 
 // read reads a line from the connection.
 func (c Client) read() (string, error) {
-	if err := c.conn.SetDeadline(time.Now().Add(c.timeoutTime)); err != nil {
+	if err := c.conn.SetReadDeadline(time.Now().Add(c.timeoutTime)); err != nil {
 		return "", fmt.Errorf("unable to set deadline: %s", err)
 	}
 
@@ -174,7 +174,7 @@ func (c Client) WriteMessage(m irc.Message) error {
 
 // write writes a string to the connection
 func (c Client) write(s string) error {
-	if err := c.conn.SetDeadline(time.Now().Add(c.timeoutTime)); err != nil {
+	if err := c.conn.SetWriteDeadline(time.Now().Add(c.timeoutTime)); err != nil {
 		return fmt.Errorf("unable to set deadline: %s", err)
 	}
 
