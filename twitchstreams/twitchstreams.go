@@ -101,8 +101,7 @@ func pollStreams(c *godrop.Client) {
 
 		for _, ch := range strings.Fields(c.Config["twitchstreams-channels"]) {
 			for _, stream := range streams {
-				_ = c.Message(ch, fmt.Sprintf("%s is streaming: %s", username,
-					stream.Title))
+				_ = c.Message(ch, stream.String())
 			}
 		}
 	}
@@ -133,8 +132,7 @@ func outputStreams(c *godrop.Client, target string, usernames []string) {
 		}
 
 		for _, stream := range streams {
-			_ = c.Message(target, fmt.Sprintf("%s is streaming: %s", username,
-				stream.Title))
+			_ = c.Message(target, stream.String())
 		}
 	}
 }
@@ -164,7 +162,18 @@ func getDefaultUsers(config map[string]string) []string {
 
 // Stream describes an active stream
 type Stream struct {
-	Title string
+	Username string
+	Title    string
+}
+
+func (s Stream) String() string {
+	u := fmt.Sprintf("https://www.twitch.tv/%s", url.PathEscape(s.Username))
+
+	if s.Title == "" {
+		return fmt.Sprintf("%s is streaming (%s)", s.Username, u)
+	}
+
+	return fmt.Sprintf("%s is streaming: %s (%s)", s.Username, s.Title, u)
 }
 
 func getStreams(clientID, username string) ([]Stream, error) {
@@ -216,7 +225,10 @@ func getStreams(clientID, username string) ([]Stream, error) {
 		if !ok {
 			return nil, fmt.Errorf("stream title is not a string")
 		}
-		streams = append(streams, Stream{title})
+		streams = append(streams, Stream{
+			Username: username,
+			Title:    strings.TrimSpace(title),
+		})
 	}
 
 	return streams, nil
