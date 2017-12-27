@@ -45,9 +45,9 @@ type Answer struct {
 }
 
 // Regular expressions to match on !triggers
-var ddgTriggerRe = regexp.MustCompile(`(?i)^\\s*[!.](?:ddg|d|g|google)(\\s+.*|$)`)
-var ddg1TriggerRe = regexp.MustCompile(`(?i)^\\s*[!.](?:ddg1|d1|g1)(\\s+.*|$)`)
-var duckTriggerRe = regexp.MustCompile(`(?i)^\\s*[!.](?:duck)(\\s+.*|$)`)
+var ddgTriggerRe = regexp.MustCompile(`(?i)^\s*[!.](?:ddg|d|g|google)(\s+.*|$)`)
+var ddg1TriggerRe = regexp.MustCompile(`(?i)^\s*[!.](?:ddg1|d1|g1)(\s+.*|$)`)
+var duckTriggerRe = regexp.MustCompile(`(?i)^\s*[!.](?:duck)(\s+.*|$)`)
 
 // Timeout on HTTP requests.
 var timeout = 15 * time.Second
