@@ -320,6 +320,8 @@ func (c *Client) Message(target string, message string) error {
 			endIndex = len(message)
 		}
 		piece := message[i:endIndex]
+		piece = strings.Replace(piece, "\r", "", -1)
+		piece = strings.Replace(piece, "\n", " ", -1)
 
 		if err := c.WriteMessage(irc.Message{
 			Command: "PRIVMSG",
